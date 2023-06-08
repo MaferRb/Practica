@@ -42,14 +42,14 @@ public class AdminControlador {
 	}
 
 	@GetMapping("/libros/nuevo")
-	public ModelAndView mostrarFormularioDeNuevaPelicula() {
+	public ModelAndView mostrarFormularioDeNuevaLibro() {
 		List<Genero> generos = generoRepositorio.findAll(Sort.by("titulo"));
 		return new ModelAndView("admin/nueva-libro").addObject("libro", new Libro()).addObject("generos", generos);
 	}
 
 	@PostMapping("/libros/nuevo")
-	public ModelAndView registrarPelicula(@Validated Libro libro, BindingResult bindingResult) {
-		if (bindingResult.hasErrors() || libro.getPortada().isEmpty()) {
+	public ModelAndView registrarLibro(@Validated Libro libro, BindingResult bindingResult) {
+		if (bindingResult != null && bindingResult.hasErrors() || libro.getPortada().isEmpty()) {
 			if (libro.getPortada().isEmpty()) {
 				bindingResult.rejectValue("portada", "MultipartNotEmpty");
 			}
@@ -66,7 +66,7 @@ public class AdminControlador {
 	}
 
 	@GetMapping("/libros/{id}/editar")
-	public ModelAndView mostrarFormilarioDeEditarPelicula(@PathVariable Integer id) {
+	public ModelAndView mostrarFormularioDeEditarLibro(@PathVariable Integer id) {
 		Libro libro = libroRepositorio.getOne(id);
 		List<Genero> generos = generoRepositorio.findAll(Sort.by("titulo"));
 
@@ -84,11 +84,11 @@ public class AdminControlador {
 		libroDB.setTitulo(libro.getTitulo());
 		libroDB.setSinopsis(libro.getSinopsis());
 		libroDB.setFechaEstreno(libro.getFechaEstreno());
-		libroDB.setYoutubeTrailerId(libro.getYoutubeAudioId());
+		libroDB.setYoutubeAudioId(libro.getYoutubeAudioId());
 		libroDB.setGeneros(libro.getGeneros());
 
 		if (!libro.getPortada().isEmpty()) {
-			servicio.eliminarArchivo(libro.getRutaPortada());
+			servicio.eliminarArchivo(libro.getPortada().getOriginalFilename());
 			String rutaPortada = servicio.almacenarArchivo(libro.getPortada());
 			libroDB.setRutaPortada(rutaPortada);
 		}

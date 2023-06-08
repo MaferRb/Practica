@@ -24,22 +24,27 @@ public class HomeControlador {
 	@Autowired
 	private LibroRepositorio libroRepositorio;
 
-	@GetMapping("")
+	@GetMapping("/master")
 	public ModelAndView verPaginaDeInicio() {
+		return new ModelAndView("master");
+	}
+	
+	@GetMapping("/libros")
+	public ModelAndView libros() {
 		List<Libro> ultimasLibros = libroRepositorio.findAll(PageRequest.of(0, 4, Sort.by("fechaEstreno").descending()))
 				.toList();
 		return new ModelAndView("index").addObject("ultimasLibros", ultimasLibros);
 	}
 
-	@GetMapping("/libros")
+	@GetMapping("")
 	public ModelAndView listarLibros(
 			@PageableDefault(sort = "fechaEstreno", direction = Sort.Direction.DESC) Pageable pageable) {
 		Page<Libro> libros = libroRepositorio.findAll(pageable);
 		return new ModelAndView("libros").addObject("libros", libros);
 	}
 
-	@GetMapping("/peliculas/{id}")
-	public ModelAndView mostrarDetallesDePelicula(@PathVariable Integer id) {
+	@GetMapping("/libros/{id}")
+	public ModelAndView mostrarDetallesDeLibro(@PathVariable Integer id) {
 		Libro libro = libroRepositorio.getOne(id);
 		return new ModelAndView("libro").addObject("libro", libro);
 	}

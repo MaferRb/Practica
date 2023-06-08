@@ -88,7 +88,7 @@ public class Libro {
 		return youtubeAudioId;
 	}
 
-	public void setYoutubeTrailerId(String youtubeAudioId) {
+	public void setYoutubeAudioId(String youtubeAudioId) {
 		this.youtubeAudioId = youtubeAudioId;
 	}
 

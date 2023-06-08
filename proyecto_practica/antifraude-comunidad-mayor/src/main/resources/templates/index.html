@@ -4,16 +4,44 @@
 	layout:decorate="~{master.html}">
 <head>
 <meta charset="utf-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link hrel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <title>Inicio</title>
 </head>
 <body>
-
-	<div layout:fragment="content">
-		<div class="bg-light p-5 rounded">
-			<h1 class="display-1 text-success">Bienvenido a Antifraude</h1>
-			<h2>Disfruta de tus audiolibros sin costo alguno</h2>
+	<nav class="navbar navbar-expand-sm bg-light navbar-light justify-content-center">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">
+              <img src="assets/logo.png" alt="antifraude" width="250" height="200">
+            </a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link" href="/libros">Explorar Audiolibros</a></li>
+					<li class="nav-item"><a class="nav-link" href="/admin">Administración</a></li>
+				</ul>
+			</div>
 		</div>
-
+	</nav>
+<div class="container pt-5">
+	<div layout:fragment="content">
+		
+		 <h1 class="display-5 text-danger">Bienvenido a Antifraude Comunidad Mayor</h1>
+           <blockquote class="blockquote">
+           <p>Este proyecto está dirigido a la comunidad 15 adultos mayor localizada en el sur-oriente de Cali, 
+               en el departamento del Valle, quienes se han convertido en el blanco fácil de fraude electrónico de los 
+               ciberdelincuentes, razón por la que se pretende fortalecer la competencia digital en torno a la prevención
+               de fraude electrónico, mediante contenido antifraude audiolibro.</p>
+           <footer class="blockquote-footer">De María Rivas</footer>
+        </blockquote>
+		
 		<h4 class="text-danger mt-5">Últimos Audiolibros</h4>
 
 		<div class="row">
@@ -32,5 +60,6 @@
 			</div>
 		</div>
 	</div>
+</div>	
 </body>
 </html>

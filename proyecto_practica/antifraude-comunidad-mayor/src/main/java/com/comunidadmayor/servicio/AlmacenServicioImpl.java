@@ -1,13 +1,14 @@
 package com.comunidadmayor.servicio;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -20,9 +21,20 @@ import org.springframework.core.io.Resource;
 import com.comunidadmayor.excepciones.AlmacenExcepcion;
 import com.comunidadmayor.excepciones.FileNotFoundException;
 
+import java.nio.file.StandardCopyOption;
+
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+
+import com.comunidadmayor.excepciones.AlmacenExcepcion;
+import com.comunidadmayor.excepciones.FileNotFoundException;
 @Service
 public class AlmacenServicioImpl implements AlmacenServicio {
-
 	@Value("${storage.location}")
 	private String storageLocation;
 
@@ -37,7 +49,7 @@ public class AlmacenServicioImpl implements AlmacenServicio {
 			throw new AlmacenExcepcion("Error al inicializar la ubicación en el almacen de archivos");
 		}
 	}
-
+	
 	@Override
 	public String almacenarArchivo(MultipartFile archivo) {
 		String nombreArchivo = archivo.getOriginalFilename();
@@ -53,10 +65,40 @@ public class AlmacenServicioImpl implements AlmacenServicio {
 		}
 		return nombreArchivo;
 	}
+	
+	/*
+	@Override
+	public String almacenarArchivo2(MultipartFile archivo) {
+		String nombreArchivo = archivo.getOriginalFilename();
+		if (archivo.isEmpty()) {
+			throw new AlmacenExcepcion("No se puede almacenar un archivo vacio");
+		}
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			is = archivo.getInputStream();
+			os = new FileOutputStream(new File(Paths.get(storageLocation).resolve(nombreArchivo).toString()));
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+			is.close();
+			os.close();
+		} catch (IOException excepcion) {
+			throw new AlmacenExcepcion("Error al almacenar el archivo " + nombreArchivo, excepcion);
+		}
 
+		return nombreArchivo;
+	}
+*/
 	@Override
 	public Path cargarArchivo(String nombreArchivo) {
-		return Paths.get(storageLocation).resolve(nombreArchivo);
+		Path archivo = Paths.get(storageLocation).resolve(nombreArchivo);
+		if (Files.exists(archivo))
+			return Paths.get(storageLocation).resolve(nombreArchivo);
+
+		return null;
 	}
 
 	@Override
@@ -79,10 +121,13 @@ public class AlmacenServicioImpl implements AlmacenServicio {
 	@Override
 	public void eliminarArchivo(String nombreArchivo) {
 		Path archivo = cargarArchivo(nombreArchivo);
-		try {
-			FileSystemUtils.deleteRecursively(archivo);
-		} catch (Exception excepcion) {
-			System.out.println(excepcion);
+
+		if (archivo != null && Files.exists(archivo)) {
+			try {
+				FileSystemUtils.deleteRecursively(archivo);
+			} catch (Exception excepcion) {
+				System.out.println(excepcion);
+			}
 		}
 	}
 
